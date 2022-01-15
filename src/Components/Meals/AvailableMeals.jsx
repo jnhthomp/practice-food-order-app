@@ -3,6 +3,13 @@ import classes from './AvailableMeals.module.css';
 import Card from '../UI/Card.jsx';
 import MealItem from './MealItem/MealItem.jsx';
 
+// List of meals that are offered by the restaurant
+// Ideally these would actually be stored on a server and we would request a list
+//  but this is the basic shape the response might look like when we request a list of meals
+// All meals must have a unique id, name, price, and description 
+//  description is only used within <MealItem> but could technically be an empty string without messing up the rest of the application too much
+//  Try to keep description < 30 chars if adding new meals
+// Price should be stored as number so calculations are easier and are formatted when displayed to users
 const DUMMY_MEALS = [
   {
     id: 'm1',
@@ -30,8 +37,11 @@ const DUMMY_MEALS = [
   },
 ];
 
+// Used to hold and display full list of available meals users can select and add
 const AvailableMeals = () => {
 
+  // Create a <MealItem> for all meals within DUMMY_MEALS array to display individual information
+  // Use meal.id as key since those should be unique and only 1 <MealItem> is generated per meal
   const mealsList = DUMMY_MEALS.map((meal) => {
     return (<MealItem 
               id={meal.id}
@@ -43,9 +53,12 @@ const AvailableMeals = () => {
   })
 
   return (
+    // Section to hold meals list and sepearte it from <MealsSummary sibling in dom>
     <section className={classes.meals}>
+      {/* Card to hold and style overall list of meals */}
       <Card>
         <ul>
+          {/* Full list of mapped <MealItem> components (1 for each meal in DUMMY_MEALS) */}
           {mealsList}
         </ul> 
       </Card>
