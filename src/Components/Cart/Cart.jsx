@@ -44,6 +44,15 @@ const Cart = (props) => {
     setIsCheckout(true);
   }
 
+  const submitOrderHandler = (userData) => {
+    fetch('https://react-http-82bca-default-rtdb.firebaseio.com/orders.json', {
+      method: 'POST',
+      body: JSON.stringify({
+        user: userData,
+        orderedItems: cartCtx.items
+      })
+    });
+  }
 
   // This is a jsx object that hold an unordered list
   // Each list item is an item in the cart that is retrieved from CartContext
@@ -104,7 +113,7 @@ const Cart = (props) => {
         {/* Formatted value */}
         <span>{totalAmount}</span>
       </div>
-      {isCheckout && <Checkout onCancel={props.onHideCart}/>}
+      {isCheckout && <Checkout onConfirm={submitOrderHandler} onCancel={props.onHideCart}/>}
       {!isCheckout && modalActions}
     </Modal>
   )
