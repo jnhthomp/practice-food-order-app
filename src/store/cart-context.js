@@ -14,7 +14,9 @@ const CartContext = React.createContext({
   addItem: (item) => {},
   // Initiate a function to remove an item from the cart
   // Is given functionality within <CartProvider> cartContext.removeItem
-  removeItem: (item) => {}
+  removeItem: (item) => {},
+
+  clearCart: ()=>{}
 });
 
 export default CartContext

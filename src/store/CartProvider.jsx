@@ -105,6 +105,10 @@ const cartReducer = (state, action) => {
     }
   }
 
+  if(action.type === 'CLEAR'){
+    return defaultCartState;
+  }
+
   // Default return if no action found 
   // Will return empty cart
   return defaultCartState;
@@ -138,6 +142,10 @@ const CartProvider = (props) => {
     dispatchCartAction({type: 'REMOVE', id: id})
   }
 
+  const clearCartHandler = () => {
+    dispatchCartAction({type: 'CLEAR'})
+  }
+
   // Context to pass onto components that use this provider component by using this as the value within our <CartContext.Provider> below
   const cartContext = {
     // Array of item objects within cart copied from state
@@ -147,7 +155,8 @@ const CartProvider = (props) => {
     // Pass function allowing children components to add item objects to cart
     addItem: addItemToCartHandler,
     // Pass function allowing children component to remove item objects from cart
-    removeItem: removeItemFromCartHandler
+    removeItem: removeItemFromCartHandler,
+    clearCart: clearCartHandler
   }
 
   return (

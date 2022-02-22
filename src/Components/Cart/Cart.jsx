@@ -5,12 +5,16 @@ import classes from './Cart.module.css';
 import Modal from '../UI/Modal.jsx';
 import CartItem from './CartItem.jsx';
 import Checkout from './Checkout.jsx';
+import { Fragment } from 'react/cjs/react.production.min';
 
 // This component displays the cart modal
 // Includes a list of items in the cart retrieved from CartContext which holds an array of items in state
 // Accepted props: onHideCart (used to dismiss/remove this modal component)
 const Cart = (props) => {
+  // TODO: useReducer here instead of useState to manage cart states
   const [isCheckout, setIsCheckout] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [didSubmit, setDidSubmit] = useState(false);
   // Gain access to CartContext and its values/methods
   const cartCtx = useContext(CartContext);
   
@@ -44,14 +48,21 @@ const Cart = (props) => {
     setIsCheckout(true);
   }
 
-  const submitOrderHandler = (userData) => {
-    fetch('https://react-http-82bca-default-rtdb.firebaseio.com/orders.json', {
+  const submitOrderHandler = async (userData) => {
+    setIsSubmitting(true);
+
+    // TODO: Manage errors if submission doesn't work (store response from fetch and check it)
+    await fetch('https://react-http-82bca-default-rtdb.firebaseio.com/orders.json', {
       method: 'POST',
       body: JSON.stringify({
         user: userData,
         orderedItems: cartCtx.items
       })
     });
+
+    setIsSubmitting(false);
+    setDidSubmit(true);
+    cartCtx.clearCart();
   }
 
   // This is a jsx object that hold an unordered list
@@ -99,22 +110,42 @@ const Cart = (props) => {
     </div >
   );
 
+  const cartModalContent = (
+    <React.Fragment>
+      {/* Output cartItem <ul> with items rendered as <CartItem>; if empty then empty list rendered*/ }
+      <div> { cartItems }</div>
+      {/* Total cart value and label */ }
+      <div className ={ classes.total }>
+        {/* Label */}
+        <span> Total Amount</span>
+        {/* Formatted value */ }
+        <span> { totalAmount }</span>
+      </div>
+      { isCheckout && <Checkout onConfirm={submitOrderHandler} onCancel={props.onHideCart} />}
+      { !isCheckout && modalActions }
+    </React.Fragment>
+  )
+
+  const isSubmittingModalContent = <p>Sending Order Data...</p>
+  const didSubmitModalContent = (
+  <React.Fragment>
+    <p>Successfully sent the order!</p>
+    <div className={classes.actions}>
+      <button className={classes.button} onClick={props.onHideCart}> 
+        Close
+      </button>
+    </div>
+  </React.Fragment>
+  )
+
   return (
     // Modal UI component to display the cart inside of
     // <Modal> contains a backdrop and an area to accept children such as the content of this card component
     // Accepts `onHideCart` to close modal when backdrop is clicked
     <Modal onHideCart={props.onHideCart}>
-      {/* Output cartItem <ul> with items rendered as <CartItem>; if empty then empty list rendered*/}
-      <div>{cartItems}</div>
-      {/* Total cart value and label */}
-      <div className={classes.total}>
-        {/* Label */}
-        <span>Total Amount</span>
-        {/* Formatted value */}
-        <span>{totalAmount}</span>
-      </div>
-      {isCheckout && <Checkout onConfirm={submitOrderHandler} onCancel={props.onHideCart}/>}
-      {!isCheckout && modalActions}
+      {!isSubmitting && !didSubmit && cartModalContent}
+      {isSubmitting && isSubmittingModalContent}
+      {!isSubmitting && didSubmit && didSubmitModalContent}
     </Modal>
   )
 }
