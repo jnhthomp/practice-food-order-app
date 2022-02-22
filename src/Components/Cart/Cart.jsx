@@ -1,15 +1,16 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 // Give access to Cart state
 import CartContext from '../../store/cart-context.js';
 import classes from './Cart.module.css';
 import Modal from '../UI/Modal.jsx';
 import CartItem from './CartItem.jsx';
+import Checkout from './Checkout.jsx';
 
 // This component displays the cart modal
 // Includes a list of items in the cart retrieved from CartContext which holds an array of items in state
 // Accepted props: onHideCart (used to dismiss/remove this modal component)
 const Cart = (props) => {
-
+  const [isCheckout, setIsCheckout] = useState(false);
   // Gain access to CartContext and its values/methods
   const cartCtx = useContext(CartContext);
   
@@ -37,6 +38,12 @@ const Cart = (props) => {
     // If the amount was not set to 1 when adding it would double the number of that item in the cart every click
     cartCtx.addItem({...item, amount: 1})
   }
+
+
+  const orderHandler = () => {
+    setIsCheckout(true);
+  }
+
 
   // This is a jsx object that hold an unordered list
   // Each list item is an item in the cart that is retrieved from CartContext
@@ -66,6 +73,23 @@ const Cart = (props) => {
     </ul>
   );
 
+  const modalActions = (
+    // Hold cart action buttons such as "Close" and "Order" 
+    < div className = { classes.actions } >
+      {/* Close Cart modal button */ }
+      < button
+          className = { classes['button--alt']}
+          onClick = { props.onHideCart }> Close</ button>
+      {/* Conditionally show "Order" button depending on if there are items in the cart
+      hasItems will only be true if cart is not empty (set above)*/}
+      {hasItems &&
+      <button
+        className={classes.button}
+        onClick={orderHandler}>Order</button>
+      }
+    </div >
+  );
+
   return (
     // Modal UI component to display the cart inside of
     // <Modal> contains a backdrop and an area to accept children such as the content of this card component
@@ -80,14 +104,8 @@ const Cart = (props) => {
         {/* Formatted value */}
         <span>{totalAmount}</span>
       </div>
-      {/* Hold cart action buttons such as "Close" and "Order" */}
-      <div className={classes.actions}>
-        {/* Close Cart modal button */}
-        <button className={classes['button--alt']} onClick={props.onHideCart}>Close</button>
-        {/* Conditionally show "Order" button depending on if there are items in the cart
-              hasItems will only be true if cart is not empty (set above)*/}
-        {hasItems && <button className={classes.button}>Order</button>}
-      </div>
+      {isCheckout && <Checkout onCancel={props.onHideCart}/>}
+      {!isCheckout && modalActions}
     </Modal>
   )
 }
