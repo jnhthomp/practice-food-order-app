@@ -7,7 +7,7 @@ import AvailableMeals from './AvailableMeals.jsx';
 //  <AvailableMeals> Contains a list of meals that users can click to add them to the cart
 const Meals = () => {
   return (
-    <Fragment>\
+    <Fragment>
       {/* Short text describing meals/restaurant */}
       <MealsSummary />
       {/* List of meals users can click to add to cart */}
