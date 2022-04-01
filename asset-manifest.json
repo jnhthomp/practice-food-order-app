@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/practice-food-order-app/static/css/main.49a9103e.css",
+    "main.js": "/practice-food-order-app/static/js/main.384d1c16.js",
+    "static/media/meals.jpg": "/practice-food-order-app/static/media/meals.2971f633fc1382581cbf.jpg",
+    "index.html": "/practice-food-order-app/index.html",
+    "main.49a9103e.css.map": "/practice-food-order-app/static/css/main.49a9103e.css.map",
+    "main.384d1c16.js.map": "/practice-food-order-app/static/js/main.384d1c16.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.49a9103e.css",
+    "static/js/main.384d1c16.js"
+  ]
+}
