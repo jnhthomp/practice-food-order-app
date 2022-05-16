@@ -44,7 +44,13 @@ Since menu items are retrieved from firebase and the item itself is not importan
 - Add better form validation and feedback (see form project)
 - Add different types of meal sections (breakfast, lunch, dinner)
   - Make these sections collapsable
-- Integrate with restaurant project for a more reasistic experience
+- Integrate with restaurant project for a more realistic experience
+
+## Lessons Learned
+- State management with React Context
+- Setting UI items via data retrieved from an API utilizing `useEffect`
+- Submitting data to a database
+- Using `useReducer` for complex state management
 
 ## Other Examples:
 Take a look at other examples from my <a href="https://jtdev.netlify.app/">portfolio</a> using the lessons learned from these classes:
